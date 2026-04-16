@@ -3,22 +3,11 @@ import { CheckSquare, Square } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import Loading from '../components/Loading';
 
-const Bedding = () => {
-    const [settings, setSettings] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [checked, setChecked] = useState({});
+import { useSettings } from '../context/SettingsContext';
 
-    useEffect(() => {
-        const fetchSettings = async () => {
-            try {
-                const { data } = await supabase.from('site_settings').select('*').single();
-                if (data) setSettings(data);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchSettings();
-    }, []);
+const Bedding = () => {
+    const { settings, loading } = useSettings();
+    const [checked, setChecked] = useState({});
 
     if (loading) return <Loading />;
 

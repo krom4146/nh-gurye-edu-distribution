@@ -21,21 +21,11 @@ const MenuItem = ({ icon, label, to, color }) => {
 };
 
 
-const Home = () => {
-    const [settings, setSettings] = useState(null);
-    const [loading, setLoading] = useState(true);
+import { useSettings } from '../context/SettingsContext';
 
-    useEffect(() => {
-        const fetchSettings = async () => {
-            try {
-                const { data } = await supabase.from('site_settings').select('*').single();
-                if (data) setSettings(data);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchSettings();
-    }, []);
+
+const Home = () => {
+    const { settings, loading } = useSettings();
 
     if (loading) return <Loading />;
 

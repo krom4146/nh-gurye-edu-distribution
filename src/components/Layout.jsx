@@ -2,21 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { Home, LogOut, ChevronLeft } from 'lucide-react';
 import PWAInstallPrompt from './PWAInstallPrompt';
-import { supabase } from '../lib/supabaseClient';
+import { useSettings } from '../context/SettingsContext';
 
 const Layout = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const isHome = location.pathname === '/';
-    const [settings, setSettings] = useState(null);
-
-    useEffect(() => {
-        const fetchSettings = async () => {
-            const { data } = await supabase.from('site_settings').select('center_name, bg_image_url').single();
-            if (data) setSettings(data);
-        };
-        fetchSettings();
-    }, []);
+    const { settings, loading } = useSettings();
 
     useEffect(() => {
         if (settings?.bg_image_url) {

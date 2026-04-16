@@ -15,21 +15,11 @@ const markerColors = [
     'bg-indigo-100 text-indigo-700'
 ];
 
-const Facility = () => {
-    const [settings, setSettings] = useState(null);
-    const [loading, setLoading] = useState(true);
+import { useSettings } from '../context/SettingsContext';
 
-    useEffect(() => {
-        const fetchSettings = async () => {
-            try {
-                const { data } = await supabase.from('site_settings').select('*').single();
-                if (data) setSettings(data);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchSettings();
-    }, []);
+
+const Facility = () => {
+    const { settings, loading } = useSettings();
 
     if (loading) return <Loading />;
 

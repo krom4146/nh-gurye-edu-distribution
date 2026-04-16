@@ -18,21 +18,10 @@ const penalties = [
     { reason: '타. 출석등록 미실시자', point: -1 },
 ];
 
-const Rules = () => {
-    const [settings, setSettings] = useState(null);
-    const [loading, setLoading] = useState(true);
+import { useSettings } from '../context/SettingsContext';
 
-    useEffect(() => {
-        const fetchSettings = async () => {
-            try {
-                const { data } = await supabase.from('site_settings').select('life_rules').single();
-                if (data) setSettings(data);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchSettings();
-    }, []);
+const Rules = () => {
+    const { settings, loading } = useSettings();
 
     if (loading) return <Loading />;
 
