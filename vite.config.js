@@ -15,8 +15,8 @@ export default defineConfig({
       },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
-        name: '농협구례교육원',
-        short_name: '구례교육원',
+        name: '농협교육원',
+        short_name: '농협교육원',
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',

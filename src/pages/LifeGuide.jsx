@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabaseClient';
 
 const defaultRules = [
     { icon: UserCheck, title: '인사', key: 'greeting', defaultDesc: '다들 서로가 처음이시죠. 우리 먼저 인사 나눠요. (명찰 착용 권장)' },
-    { icon: Utensils, title: '식사 가이드', key: 'meal_guide', defaultDesc: '농협구례교육원은 밥맛이 전국 최고! 3끼 식사 꼭 하세요.' },
+    { icon: Utensils, title: '식사 가이드', key: 'meal_guide', defaultDesc: '농협교육원은 밥맛이 전국 최고! 3끼 식사 꼭 하세요.' },
     { icon: Phone, title: '불편사항 접수', key: 'complaint_info', defaultDesc: '일과시간 중: 지도교수/반장, 이후: 당직자 (061-780-1000)' },
     { icon: VolumeX, title: '휴식/정숙', key: 'rest_rules', defaultDesc: '23시 이후에는 본인의 숙소에서만 머물러 주세요.' },
     { icon: Cigarette, title: '흡연 구역 안내', key: 'smoking_rules', defaultDesc: '비흡연자를 위해 담배는 야외(노란항아리)에서만!' },

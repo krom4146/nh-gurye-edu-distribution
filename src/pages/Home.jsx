@@ -37,7 +37,7 @@ const Home = () => {
             <div className="text-center py-10 px-6 bg-black/40 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 mb-8 mt-4">
                 <div className="space-y-4">
                     <h2 className="text-2xl sm:text-3xl font-extrabold text-white drop-shadow-lg tracking-tight leading-snug whitespace-pre-wrap break-keep">
-                        {settings?.slogan || '농협구례교육원에 오신 것을\n환영합니다'}
+                        {settings?.slogan || '농협교육원에 오신 것을\n환영합니다'}
                     </h2>
                     <p className="text-sm sm:text-base text-gray-100 leading-loose whitespace-pre-wrap font-medium drop-shadow-md break-keep">
                         {settings?.main_description || '이곳에 교육원의 상세 설명이나 환영 문구가 표시됩니다.\n원하시는 내용을 관리자 페이지에서 입력해 주세요.'}
