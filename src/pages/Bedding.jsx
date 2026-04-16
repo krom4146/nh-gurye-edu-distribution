@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { CheckSquare, Square } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
+import Loading from '../components/Loading';
 
 const Bedding = () => {
     const [settings, setSettings] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [checked, setChecked] = useState({});
 
     useEffect(() => {
         const fetchSettings = async () => {
-            const { data } = await supabase.from('site_settings').select('*').single();
-            if (data) setSettings(data);
+            try {
+                const { data } = await supabase.from('site_settings').select('*').single();
+                if (data) setSettings(data);
+            } finally {
+                setLoading(false);
+            }
         };
         fetchSettings();
     }, []);
+
+    if (loading) return <Loading />;
 
     const toggleCheck = (idx) => {
         setChecked(prev => ({ ...prev, [idx]: !prev[idx] }));

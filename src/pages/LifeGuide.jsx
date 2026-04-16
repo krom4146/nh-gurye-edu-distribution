@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, Phone, VolumeX, Cigarette, UserCheck, Utensils } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
+import Loading from '../components/Loading';
 
 const defaultRules = [
     { icon: UserCheck, title: '인사', key: 'greeting', defaultDesc: '다들 서로가 처음이시죠. 우리 먼저 인사 나눠요. (명찰 착용 권장)' },
@@ -13,13 +14,21 @@ const defaultRules = [
 
 const LifeGuide = () => {
     const [settings, setSettings] = useState(null);
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         const fetchSettings = async () => {
-            const { data } = await supabase.from('site_settings').select('*').single();
-            if (data) setSettings(data);
+            try {
+                const { data } = await supabase.from('site_settings').select('*').single();
+                if (data) setSettings(data);
+            } finally {
+                setLoading(false);
+            }
         };
         fetchSettings();
     }, []);
+
+    if (loading) return <Loading />;
 
     return (
         <div className="space-y-8">

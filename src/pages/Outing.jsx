@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { format } from 'date-fns';
 import { Lock, LogOut, CheckCircle, RefreshCw } from 'lucide-react';
+import Loading from '../components/Loading';
 
 const Outing = () => {
     const [isAdmin, setIsAdmin] = useState(false);
@@ -300,7 +301,7 @@ const Outing = () => {
                     <div className="space-y-3">
                         <h3 className="font-bold text-lg text-gray-800 px-1">현황 리스트</h3>
                         {loading ? (
-                            <p className="text-center text-gray-500 py-4">로딩 중...</p>
+                            <Loading message="내역을 불러오는 중..." />
                         ) : outings.length === 0 ? (
                             <div className="text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
                                 <p className="text-gray-400">신청 내역이 없습니다.</p>
@@ -400,7 +401,7 @@ const Outing = () => {
                                         value={formData.destination}
                                         onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
                                         className="w-full p-2 border border-gray-200 rounded focus:border-nh-blue focus:ring-1 focus:ring-nh-blue outline-none transition-colors"
-                                        placeholder="예: 구례읍"
+                                        placeholder="예: OO시 OO동"
                                     />
                                 </div>
 

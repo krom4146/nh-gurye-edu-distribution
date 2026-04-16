@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, Map, BookOpen, AlertCircle, CheckSquare, Coffee } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
+import Loading from '../components/Loading';
 
 const MenuItem = ({ icon, label, to, color }) => {
     const navigate = useNavigate();
@@ -22,14 +23,21 @@ const MenuItem = ({ icon, label, to, color }) => {
 
 const Home = () => {
     const [settings, setSettings] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchSettings = async () => {
-            const { data } = await supabase.from('site_settings').select('*').single();
-            if (data) setSettings(data);
+            try {
+                const { data } = await supabase.from('site_settings').select('*').single();
+                if (data) setSettings(data);
+            } finally {
+                setLoading(false);
+            }
         };
         fetchSettings();
     }, []);
+
+    if (loading) return <Loading />;
 
     return (
         <div className="space-y-6">

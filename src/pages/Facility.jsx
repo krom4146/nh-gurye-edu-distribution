@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
+import Loading from '../components/Loading';
 import facilityMap from '../assets/facility_map.jpg';
 
 const markerColors = [
@@ -16,14 +17,21 @@ const markerColors = [
 
 const Facility = () => {
     const [settings, setSettings] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchSettings = async () => {
-            const { data } = await supabase.from('site_settings').select('*').single();
-            if (data) setSettings(data);
+            try {
+                const { data } = await supabase.from('site_settings').select('*').single();
+                if (data) setSettings(data);
+            } finally {
+                setLoading(false);
+            }
         };
         fetchSettings();
     }, []);
+
+    if (loading) return <Loading />;
 
     return (
         <div className="space-y-6">

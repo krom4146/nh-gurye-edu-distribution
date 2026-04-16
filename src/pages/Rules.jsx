@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AlertTriangle, FileWarning, BookOpen } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
+import Loading from '../components/Loading';
 
 const penalties = [
     { reason: '가. 교육원 내 무단음주 한 자', point: -6 },
@@ -19,14 +20,21 @@ const penalties = [
 
 const Rules = () => {
     const [settings, setSettings] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchSettings = async () => {
-            const { data } = await supabase.from('site_settings').select('life_rules').single();
-            if (data) setSettings(data);
+            try {
+                const { data } = await supabase.from('site_settings').select('life_rules').single();
+                if (data) setSettings(data);
+            } finally {
+                setLoading(false);
+            }
         };
         fetchSettings();
     }, []);
+
+    if (loading) return <Loading />;
 
     return (
         <div className="space-y-6">
