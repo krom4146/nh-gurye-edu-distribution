@@ -234,15 +234,28 @@ const Admin = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">관리자 운영 비밀번호 (외출/건의사항 등)</label>
-                        <input
-                            type="text"
-                            className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-yellow-50"
-                            value={settings.operation_password || ''}
-                            onChange={(e) => setSettings({ ...settings, operation_password: e.target.value })}
-                            placeholder="운영 비밀번호를 입력해주세요"
+                        <label className="block text-sm font-medium text-gray-700">메인 상세 설명(긴 문구)</label>
+                        <textarea
+                            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                            rows="3"
+                            value={settings.main_description || ''}
+                            onChange={(e) => setSettings({ ...settings, main_description: e.target.value })}
                         />
-                        <p className="text-xs text-gray-500 mt-1">* '/admin' 비밀번호와 별개로, 앱 내 관리자 기능 사용 시 요구되는 비번입니다.</p>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">배경 이미지 업로드</label>
+                        {settings.bg_image_url && (
+                            <div className="mb-2">
+                                <img src={settings.bg_image_url} alt="현재 배경" className="h-32 w-auto object-cover rounded shadow-sm border border-gray-200" />
+                                <p className="text-xs text-gray-500 mt-1">현재 적용된 이미지</p>
+                            </div>
+                        )}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-gray-300 rounded-md p-2"
+                            onChange={(e) => setImageFile(e.target.files[0])}
+                        />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -267,28 +280,15 @@ const Admin = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">메인 상세 설명(긴 문구)</label>
-                        <textarea
-                            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                            rows="3"
-                            value={settings.main_description || ''}
-                            onChange={(e) => setSettings({ ...settings, main_description: e.target.value })}
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">배경 이미지 업로드</label>
-                        {settings.bg_image_url && (
-                            <div className="mb-2">
-                                <img src={settings.bg_image_url} alt="현재 배경" className="h-32 w-auto object-cover rounded shadow-sm border border-gray-200" />
-                                <p className="text-xs text-gray-500 mt-1">현재 적용된 이미지</p>
-                            </div>
-                        )}
+                        <label className="block text-sm font-medium text-gray-700">관리자 운영 비밀번호 (외출/건의사항 등)</label>
                         <input
-                            type="file"
-                            accept="image/*"
-                            className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-gray-300 rounded-md p-2"
-                            onChange={(e) => setImageFile(e.target.files[0])}
+                            type="text"
+                            className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-yellow-50"
+                            value={settings.operation_password || ''}
+                            onChange={(e) => setSettings({ ...settings, operation_password: e.target.value })}
+                            placeholder="운영 비밀번호를 입력해주세요"
                         />
+                        <p className="text-xs text-gray-500 mt-1">* '/admin' 비밀번호와 별개로, 앱 내 관리자 기능 사용 시 요구되는 비번입니다.</p>
                     </div>
                 </div>
             </div>
