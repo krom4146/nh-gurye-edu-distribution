@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabaseClient';
 import { format } from 'date-fns';
 import { Lock, PenTool, ChevronLeft, Send, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useSettings } from '../context/SettingsContext';
 
 const Suggestions = () => {
     const navigate = useNavigate();
@@ -99,10 +100,13 @@ const Suggestions = () => {
         }
     };
 
+    const { settings } = useSettings();
+
     // Handle Password Verification
     const verifyPassword = () => {
+        const opPassword = settings?.operation_password || '1234';
         if (showAdminLogin) {
-            if (inputPassword === 'nacf1660') {
+            if (inputPassword === opPassword) {
                 setIsAdmin(true);
                 setShowAdminLogin(false);
                 setShowPasswordPrompt(false);
@@ -116,7 +120,7 @@ const Suggestions = () => {
         if (!pendingPost) return;
 
         // Master Key Logic
-        if (inputPassword === 'nacf1660' || inputPassword === pendingPost.password) {
+        if (inputPassword === opPassword || inputPassword === pendingPost.password) {
             setSelectedPost(pendingPost);
             setReplyContent(pendingPost.admin_reply || '');
             setView('detail');

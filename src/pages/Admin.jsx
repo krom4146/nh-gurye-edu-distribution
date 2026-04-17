@@ -7,6 +7,7 @@ const Admin = () => {
         slogan: '',
         main_description: '',
         bg_image_url: '',
+        operation_password: '', // 추가된 필드
         facility_map_url: '',
         facility_info_1: '',
         facility_info_2: '',
@@ -229,6 +230,17 @@ const Admin = () => {
                             value={settings.slogan || ''}
                             onChange={(e) => setSettings({ ...settings, slogan: e.target.value })}
                         />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">관리자 운영 비밀번호 (외출/건의사항 등)</label>
+                        <input
+                            type="text"
+                            className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-yellow-50"
+                            value={settings.operation_password || ''}
+                            onChange={(e) => setSettings({ ...settings, operation_password: e.target.value })}
+                            placeholder="운영 비밀번호를 입력해주세요"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">* '/admin' 비밀번호와 별개로, 앱 내 관리자 기능 사용 시 요구되는 비번입니다.</p>
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700">메인 상세 설명(긴 문구)</label>

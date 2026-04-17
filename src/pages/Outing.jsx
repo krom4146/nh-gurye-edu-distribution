@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabaseClient';
 import { format } from 'date-fns';
 import { Lock, LogOut, CheckCircle, RefreshCw } from 'lucide-react';
 import Loading from '../components/Loading';
+import { useSettings } from '../context/SettingsContext';
 
 const Outing = () => {
     const [isAdmin, setIsAdmin] = useState(false);
@@ -197,8 +198,11 @@ const Outing = () => {
         }
     };
 
+    const { settings } = useSettings();
+
     const handleAdminLogin = () => {
-        if (password === 'nacf1660') {
+        const opPassword = settings?.operation_password || '1234';
+        if (password === opPassword) {
             setIsAdmin(true);
             setShowAdminLogin(false);
             setPassword('');
