@@ -27,15 +27,36 @@ const Outing = () => {
     const [outings, setOutings] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const { settings } = useSettings();
+
     // Time Restriction Check
     const isTimeAllowed = () => {
-        const now = new Date();
-        const hours = now.getHours();
-        const minutes = now.getMinutes();
-        const currentTime = hours * 60 + minutes;
+        const startTimeStr = settings?.outing_start_time || '18:00';
+        const endTimeStr = settings?.outing_end_time || '22:55';
 
-        // 18:00 (1080) ~ 22:55 (1375)
-        return currentTime >= 1080 && currentTime <= 1375;
+        const [startH, startM] = startTimeStr.split(':').map(Number);
+        const [endH, endM] = endTimeStr.split(':').map(Number);
+
+        const startTotal = startH * 60 + startM;
+        const endTotal = endH * 60 + endM;
+
+        const now = new Date();
+        const currentTime = now.getHours() * 60 + now.getMinutes();
+
+        let allowed = false;
+        if (startTotal <= endTotal) {
+            // Same day range (e.g., 18:00 - 22:55)
+            allowed = currentTime >= startTotal && currentTime <= endTotal;
+        } else {
+            // Overnight range (e.g., 22:00 - 08:00 next day)
+            allowed = currentTime >= startTotal || currentTime <= endTotal;
+        }
+
+        return {
+            allowed,
+            start: startTimeStr,
+            end: endTimeStr
+        };
     };
 
     // Fetch current request status if ID exists
@@ -111,8 +132,9 @@ const Outing = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!isTimeAllowed() && !isAdmin) {
-            alert('신청 가능 시간이 아닙니다. (18:00 ~ 22:55)');
+        const { allowed, start, end } = isTimeAllowed();
+        if (!allowed && !isAdmin) {
+            alert(`신청 가능 시간이 아닙니다. (${start} ~ ${end})`);
             return;
         }
 
@@ -198,8 +220,6 @@ const Outing = () => {
         }
     };
 
-    const { settings } = useSettings();
-
     const handleAdminLogin = () => {
         const opPassword = settings?.operation_password || '1234';
         if (password === opPassword) {
@@ -227,7 +247,7 @@ const Outing = () => {
             setOutings([]);
         } catch (error) {
             console.error("Error resetting data: ", error);
-            alert('초기화 중 오류가 발생했습니다.');
+            alert(`초기화 중 오류가 발생했습니다: ${error.message || '알 수 없는 오류'}\n(데이터베이스 삭제 권한이 있는지 확인해주세요)`);
         }
     };
 
@@ -409,16 +429,26 @@ const Outing = () => {
                                     />
                                 </div>
 
-                                <button
-                                    type="submit"
-                                    className="w-full bg-nh-green text-white py-3 rounded-lg font-bold hover:bg-green-600 transition-colors shadow-sm active:scale-[0.98]"
-                                >
-                                    출발하기 (신청)
-                                </button>
-                                {!isTimeAllowed() && (
-                                    <p className="text-xs text-red-500 text-center mt-2">
-                                        * 현재는 신청 가능 시간이 아닙니다 (18:00 ~ 22:55)
-                                    </p>
+                                {isTimeAllowed().allowed ? (
+                                    <button
+                                        type="submit"
+                                        className="w-full bg-nh-green text-white py-3 rounded-lg font-bold hover:bg-green-600 transition-colors shadow-sm active:scale-[0.98]"
+                                    >
+                                        출발하기 (신청)
+                                    </button>
+                                ) : (
+                                    <div className="space-y-2">
+                                        <button
+                                            type="button"
+                                            disabled
+                                            className="w-full bg-gray-300 text-gray-500 py-3 rounded-lg font-bold cursor-not-allowed"
+                                        >
+                                            현재 신청 불가
+                                        </button>
+                                        <p className="text-xs text-red-500 text-center mt-2">
+                                            * 현재는 신청 가능 시간이 아닙니다 ({isTimeAllowed().start} ~ {isTimeAllowed().end})
+                                        </p>
+                                    </div>
                                 )}
                             </form>
                         </div>

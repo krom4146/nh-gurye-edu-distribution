@@ -28,7 +28,9 @@ const Admin = () => {
         checkout_img_2: '',
         checkout_img_3: '',
         checkout_img_4: '',
-        checkout_checklist: ''
+        checkout_checklist: '',
+        outing_start_time: '18:00',
+        outing_end_time: '22:55'
     });
     const [loading, setLoading] = useState(true);
     const [imageFile, setImageFile] = useState(null);
@@ -242,6 +244,28 @@ const Admin = () => {
                         />
                         <p className="text-xs text-gray-500 mt-1">* '/admin' 비밀번호와 별개로, 앱 내 관리자 기능 사용 시 요구되는 비번입니다.</p>
                     </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">외출/외박 신청 시작 시간</label>
+                            <input
+                                type="time"
+                                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                                value={settings.outing_start_time || '18:00'}
+                                onChange={(e) => setSettings({ ...settings, outing_start_time: e.target.value })}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">외출/외박 신청 종료 시간</label>
+                            <input
+                                type="time"
+                                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                                value={settings.outing_end_time || '22:55'}
+                                onChange={(e) => setSettings({ ...settings, outing_end_time: e.target.value })}
+                            />
+                        </div>
+                    </div>
+
                     <div>
                         <label className="block text-sm font-medium text-gray-700">메인 상세 설명(긴 문구)</label>
                         <textarea
