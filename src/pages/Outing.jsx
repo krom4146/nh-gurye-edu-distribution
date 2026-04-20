@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { format } from 'date-fns';
 import { Lock, LogOut, CheckCircle, RefreshCw } from 'lucide-react';
@@ -92,12 +92,10 @@ const Outing = () => {
         fetchCurrentRequest();
     }, [currentRequestId]);
 
-    // Admin: Fetch all outings
-    useEffect(() => {
+    const fetchStayRequests = useCallback(async () => {
         if (!isAdmin || !supabase) return;
-
-        const fetchOutings = async () => {
-            setLoading(true);
+        setLoading(true);
+        try {
             const { data, error } = await supabase
                 .from('stay_requests')
                 .select('*')
@@ -109,24 +107,32 @@ const Outing = () => {
             } else {
                 setOutings(data || []);
             }
+        } catch (error) {
+            console.error("Unexpected error fetching outings:", error);
+        } finally {
             setLoading(false);
-        };
+        }
+    }, [isAdmin]);
 
-        fetchOutings();
+    // Admin: Fetch all outings
+    useEffect(() => {
+        if (!isAdmin) return;
+
+        fetchStayRequests();
 
         // Real-time subscription for Admin
         if (!supabase) return;
         const subscription = supabase
             .channel('stay_requests_channel')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'stay_requests' }, () => {
-                fetchOutings();
+                fetchStayRequests();
             })
             .subscribe();
 
         return () => {
             subscription.unsubscribe();
         };
-    }, [isAdmin]);
+    }, [isAdmin, fetchStayRequests]);
 
 
     const handleSubmit = async (e) => {
@@ -205,6 +211,10 @@ const Outing = () => {
     const handleAdminReturn = async (id) => {
         try {
             if (!supabase) throw new Error("Supabase client not initialized");
+
+            // Optimistic Update: Immediately filter out the item to improve UX
+            setOutings(prev => prev.filter(item => item.id !== id));
+
             const { error } = await supabase
                 .from('stay_requests')
                 .update({
@@ -213,10 +223,17 @@ const Outing = () => {
                 })
                 .eq('id', id);
 
-            if (error) throw error;
-            // List will auto-update via subscription or re-fetch
+            if (error) {
+                // If error occurs, refresh to restore correct state
+                fetchStayRequests();
+                throw error;
+            }
+
+            // Explicitly refresh to ensure sync with server
+            fetchStayRequests();
         } catch (error) {
             console.error("Error updating document: ", error);
+            alert('복귀 처리 중 오류가 발생했습니다.');
         }
     };
 
