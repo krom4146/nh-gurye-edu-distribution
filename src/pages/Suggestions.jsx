@@ -119,8 +119,13 @@ const Suggestions = () => {
 
         if (!pendingPost) return;
 
-        // Master Key Logic
-        if (inputPassword === opPassword || inputPassword === pendingPost.password) {
+        // Privacy Logic
+        const isPostPasswordMatch = inputPassword === pendingPost.password;
+        const isAdminPasswordMatch = inputPassword === opPassword;
+
+        // In normal mode, only post password works.
+        // In admin mode, both post password and admin password work.
+        if (isPostPasswordMatch || (isAdmin && isAdminPasswordMatch)) {
             setSelectedPost(pendingPost);
             setReplyContent(pendingPost.admin_reply || '');
             setView('detail');
@@ -268,7 +273,7 @@ const Suggestions = () => {
                             >
                                 <div className="flex justify-between items-start mb-1">
                                     <h3 className="font-bold text-gray-800 line-clamp-1 flex-1">
-                                        {post.title}
+                                        {post.is_secret && !isAdmin ? "🔒 비공개 건의사항입니다." : post.title}
                                     </h3>
                                     {post.is_secret && <Lock size={16} className="text-gray-400 ml-2 flex-shrink-0" />}
                                 </div>

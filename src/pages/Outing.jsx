@@ -343,7 +343,7 @@ const Outing = () => {
                                         </div>
                                         <div className="text-xs text-gray-500">
                                             <span className="mr-2">📍 {item.destination}</span>
-                                            <span>🕒 {format(new Date(item.created_at), 'HH:mm')} 출발</span>
+                                            <span>🕒 {format(new Date(item.created_at), 'yyyy-MM-dd HH:mm')} 출발</span>
                                         </div>
                                     </div>
 
@@ -360,7 +360,7 @@ const Outing = () => {
                                                 <CheckCircle size={14} /> 복귀완료
                                             </span>
                                             <span className="text-xs text-gray-400">
-                                                {item.returned_at ? format(new Date(item.returned_at), 'HH:mm') : ''}
+                                                {item.returned_at ? format(new Date(item.returned_at), 'yyyy-MM-dd HH:mm') : ''}
                                             </span>
                                         </div>
                                     )}
@@ -480,7 +480,7 @@ const Outing = () => {
                                     <div className="flex justify-between">
                                         <span>출발시간</span>
                                         <span className="font-bold text-gray-800">
-                                            {currentRequestData?.created_at && format(new Date(currentRequestData.created_at), 'HH:mm')}
+                                            {currentRequestData?.created_at && format(new Date(currentRequestData.created_at), 'yyyy-MM-dd HH:mm')}
                                         </span>
                                     </div>
                                 </div>
